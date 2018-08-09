@@ -56,13 +56,13 @@ echo "Cleaning up install tree..."
 sudo rm -rf $final_path/.npm
 find $final_path -type d | grep "test$" | xargs sudo rm -rf
 find $final_path -type d | grep "tests$" | xargs sudo rm -rf
-sudo rm -rf $final_path/ghost/node_modules/sqlite3/build
+sudo rm -rf $final_path/node_modules/sqlite3/build
 sudo rm -rf $final_path/tmp
 
 
 
 echo "Setting up permissions"
-sudo chown -R ghostblog: $final_path/ghost
+sudo chown -R ghostblog: $final_path
 
 echo "Setting up database..."
 db_name=ghostblog
@@ -77,9 +77,9 @@ sed -i "s@YNH_LOCATION@${path%/}@g" ../conf/config.js
 sed -i "s@YNH_DBNAME@$db_name@g" ../conf/config.js
 sed -i "s@YNH_DBUSER@$db_user@g" ../conf/config.js
 sed -i "s@YNH_DBPWD@$db_pwd@g" ../conf/config.js
-sudo cp ../conf/config.js $final_path/ghost
-sudo chown ghostblog: $final_path/ghost/config.js
-sudo chmod 644 $final_path/ghost/config.js
+sudo cp ../conf/config.js $final_path
+sudo chown ghostblog: $final_path/config.js
+sudo chmod 644 $final_path/config.js
 
 echo "Setting up init script..."
 logfile=/var/log/ynh-ghostblog.log
@@ -109,7 +109,7 @@ sudo yunohost app ssowatconf
 echo "Registering admin..."
 admin_name=$(sudo yunohost user list --json | python ../conf/user_getname.py $admin)
 admin_mail=$(sudo yunohost user list --json | python ../conf/user_getmail.py $admin)
-curl -kL -X POST http://localhost:2368${path%/}/ghost/api/v0.1/authentication/setup/ \
+curl -kL -X POST http://localhost:2368${path%/}/api/v0.1/authentication/setup/ \
   --data-urlencode "setup[0][name]=$admin_name" \
   --data-urlencode "setup[0][email]=$admin_mail" \
   --data-urlencode "setup[0][password]=$password" \
@@ -118,4 +118,4 @@ curl -kL -X POST http://localhost:2368${path%/}/ghost/api/v0.1/authentication/se
 sudo yunohost app setting ghostblog admin -v $admin
 sudo yunohost app setting ghostblog password -v $password
 
-echo "Success ! You can go to https://$domain$path/ghost to write your posts"
+echo "Success ! You can go to https://$domain$path/ to write your posts"
