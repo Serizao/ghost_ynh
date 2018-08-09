@@ -40,7 +40,7 @@ echo "Downloading Ghost $version..."
 mkdir ../tmp
 sudo wget -O /tmp/ghost-$version.zip "https://github.com/TryGhost/Ghost/archive/$version.zip"
 echo "Deploying source files..."
-unzip /tmp/ghost-$version.zip -d /tmp/ghost
+unzip -o /tmp/ghost-$version.zip -d /tmp/ghost
 final_path=/var/www/ghostblog
 sudo mkdir -p $final_path
 sudo useradd -d $final_path ghostblog
